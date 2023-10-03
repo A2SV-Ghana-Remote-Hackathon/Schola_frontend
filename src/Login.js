@@ -1,6 +1,7 @@
 import React from 'react';
 import logoImage from './assets/img/logo.png'; // Import your logo image here
 import './assets/style.css';
+import {Link} from 'react-router-dom'
 
 const Login = () => {
   return (
@@ -61,7 +62,7 @@ const Login = () => {
                       </div>
                       <div className="col-12">
                         <p className="small mb-0">
-                          Don't have an account? <a href="pages-register.html">Create an account</a>
+                          Don't have an account? <Link to='/register'>Create an account</Link>
                         </p>
                       </div>
                     </form>

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import logoImage from './assets/img/logo.png'; // Import your logo image here
-import './assets/style.css';
+import '../assets/style.css';
 import axios from './api/axios';
-import {Link} from 'react-router-dom'
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -172,7 +171,7 @@ function Register() {
                     </div>
                     <div className="col-12">
                       <p className="small mb-0">
-                        Already have an account? <Link to='/login'>Log in</Link>
+                        Already have an account? <a href="pages-login.html">Log in</a>
                       </p>
                     </div>
                   </form>
