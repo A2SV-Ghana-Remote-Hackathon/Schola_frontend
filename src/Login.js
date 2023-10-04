@@ -1,9 +1,48 @@
-import React from 'react';
-import logoImage from './assets/img/logo.png'; // Import your logo image here
+import React, { useState } from 'react';
+import logoImage from './assets/img/logo.png';
+//  <img src="assets/img/smeagol.jpg" alt="" class="w-100 pt-4">
 import './assets/style.css';
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate()
+
+  const handleSubmit =  (e) => {
+    e.preventDefault();
+    const data = {
+      'username':email,
+      "password": password
+    };
+    
+    const formData = new FormData();
+    
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    console.log(data)
+    axios.post(`https://a2svschola.onrender.com/login/`, formData)
+      .then((response) => {
+        console.log(response.data);
+        localStorage.setItem("userAuthToken", response.data?.access_token);
+        navigate("/home")
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
   return (
     <main>
       <div className="container">
@@ -21,24 +60,40 @@ const Login = () => {
                   <div className="card-body">
                     <div className="pt-4 pb-2">
                       <h5 className="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                      <p className="text-center small">Enter your username & password to login</p>
+                      <p className="text-center small">Enter your email & password to login</p>
                     </div>
                     <form className="row g-3 needs-validation" noValidate>
                       <div className="col-12">
-                        <label htmlFor="yourUsername" className="form-label">
-                          Username
+                        <label htmlFor="you email" className="form-label">
+                          Email
                         </label>
                         <div className="input-group has-validation">
                           <span className="input-group-text" id="inputGroupPrepend">@</span>
-                          <input type="text" name="username" className="form-control" id="yourUsername" required />
-                          <div className="invalid-feedback">Please enter your username.</div>
+                          <input
+                            type="text"
+                            name= 'email'
+                            className="form-control"
+                            id="you email"
+                            value= {email}
+                            onChange={handleEmailChange}
+                            required
+                          />
+                          <div className="invalid-feedback">Please enter your email.</div>
                         </div>
                       </div>
                       <div className="col-12">
                         <label htmlFor="yourPassword" className="form-label">
                           Password
                         </label>
-                        <input type="password" name="password" className="form-control" id="yourPassword" required />
+                        <input
+                          type="password"
+                          name="password"
+                          className="form-control"
+                          id="yourPassword"
+                          value={password}
+                          onChange={handlePasswordChange}
+                          required
+                        />
                         <div className="invalid-feedback">Please enter your password!</div>
                       </div>
                       <div className="col-12">
@@ -56,19 +111,18 @@ const Login = () => {
                         </div>
                       </div>
                       <div className="col-12">
-                        <button className="btn btn-primary w-100" type="submit">
+                        <button className="btn btn-primary w-100" onClick={handleSubmit}>
                           Login
                         </button>
                       </div>
                       <div className="col-12">
                         <p className="small mb-0">
-                          Don't have an account? <Link to='/register'>Create an account</Link>
+                          Don't have an account? <Link to="/register">Create an account</Link>
                         </p>
                       </div>
                     </form>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -79,6 +133,6 @@ const Login = () => {
       </a>
     </main>
   );
-}
+};
 
 export default Login;

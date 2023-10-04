@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import logoImage from './assets/img/logo.png'; // Import your logo image here
 import './assets/style.css';
-import axios from './api/axios';
-import {Link} from 'react-router-dom'
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { baseUrl } from "./api/axios.js"
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -10,8 +11,11 @@ function Register() {
     email: '',
     username: '',
     password: '',
+    bio: '',
     termsAccepted: false,
   });
+
+  const navigate = useNavigate();
   // const [errMsg, setErrMsg] = useState('');
   // const [success, setSuccess] = useState(false);
 
@@ -22,35 +26,15 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your form submission logic here
-    //   try {
-    //     const response = await axios.post(REGISTER_URL,
-    //       JSON.stringify({ user:username, pwd:password }),
-    //       {
-    //         headers: { 'Content-Type': 'application/json' },
-    //         withCredentials: true
-    //       }
-    //     );
-    //     console.log(response?.data);
-    //     console.log(response?.accessToken);
-    //     console.log(JSON.stringify(response))
-    //     setSuccess(true);
-    //     //clear state and controlled inputs
-    //     //need value attrib on inputs for this
-    //     setUser('');
-    //     setPwd('');
-    //     setMatchPwd('');
-    //   } catch (err) {
-    //     if (!err?.response) {
-    //       setErrMsg('No Server Response');
-    //     } else if (err.response?.status === 409) {
-    //       setErrMsg('Username Taken');
-    //     } else {
-    //       setErrMsg('Registration Failed')
-    //     }
-    //     errRef.current.focus();
-    //   }
-    // }
+    
+    axios.post(`https://a2svschola.onrender.com/users/`, formData)
+      .then((response) => {
+        console.log(response.data);
+        navigate('/login')
+      })
+      .catch((err) => {
+        console.log(err);
+      })
 
   };
 
@@ -96,6 +80,21 @@ function Register() {
                         required
                       />
                       <div className="invalid-feedback">Please, enter your name!</div>
+                    </div>
+                    <div className="col-12">
+                      <label htmlFor="bio" className="form-label">
+                        Bio
+                      </label>
+                      <input
+                        type="text"
+                        name="bio"
+                        className="form-control"
+                        id="bio"
+                        value={formData.bio}
+                        onChange={handleInputChange}
+                        required
+                      />
+                      <div className="invalid-feedback">Please, enter your bio!</div>
                     </div>
                     <div className="col-12">
                       <label htmlFor="yourEmail" className="form-label">
@@ -166,7 +165,7 @@ function Register() {
                       </div>
                     </div>
                     <div className="col-12">
-                      <button className="btn btn-primary w-100" type="submit">
+                      <button className="btn btn-primary w-100" onClick={handleSubmit}>
                         Create Account
                       </button>
                     </div>
@@ -188,4 +187,4 @@ function Register() {
 }
 
 
-  export default Register;
+export default Register;

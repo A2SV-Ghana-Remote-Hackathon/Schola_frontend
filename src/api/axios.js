@@ -1,5 +1,1 @@
-import axios from 'axios';
-
-export default axios.create({
-    baseURL: 'http://localhost:3500'
-})
+export const baseUrl = "https://a2svschola.onrender.com"
