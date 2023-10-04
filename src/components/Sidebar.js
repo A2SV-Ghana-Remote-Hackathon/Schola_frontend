@@ -1,14 +1,16 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+
 
 function Sidebar() {
     return (
         <aside id="sidebar" className="sidebar">
             <ul className="sidebar-nav" id="sidebar-nav">
                 <li className="nav-item pt-3">
-                    <a className="nav-link" href="index.html">
+                    <Link className="nav-link" to = '/home'>
                         <i className="bi bi-grid"></i>
                         <span>Home</span>
-                    </a>
+                    </Link>
                 </li>
                 {/* End Home Nav */}
                 <li className="nav-heading pt-3">My Communities</li>
@@ -27,12 +29,12 @@ function Sidebar() {
                 </li>
                 {/* End F.A.Q Page Nav */}
                 <li className="nav-heading pt-3">Joined Communities</li>
-                <div className="search-bar">
+                {/* <div className="search-bar">
                     <form className="search-form d-flex align-items-center" method="POST" action="#">
                         <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
                         <button type="submit" title="Search"><i className="bi bi-search"></i></button>
                     </form>
-                </div>
+                </div> */}
                 {/* End Search Bar */}
                 <li className="nav-item">
                     <a className="nav-link collapsed" href="pages-contact.html">
@@ -68,8 +70,18 @@ function Sidebar() {
                         <span>Blank</span>
                     </a>
                 </li>
+                
+                
                 {/* End Blank Page Nav */}
             </ul>
+            <Link to='/community'>
+                <div className='mt-50'>
+                    <button type="button" className="btn btn-primary" >
+                        Create Community
+                    </button>
+                </div>
+            </Link>
+            
         </aside>
         /* End Sidebar */
     );

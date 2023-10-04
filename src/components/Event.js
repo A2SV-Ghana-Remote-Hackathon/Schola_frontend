@@ -3,10 +3,15 @@ import React, {useState, useEffect} from 'react';
 import image1 from '../assets/img/news-1.jpg';
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import axiosWithTokenHook from "../api/useAxios.js";
+
+
+const axiosWithToken = axiosWithTokenHook();
 
 
 const Event = () => {
   const [events, setEvents] = useState([]);
+  const [eventData, setEventData] = useState({});
 
   useEffect(() => {
     axios.get("https://a2svschola.onrender.com/events/")
@@ -17,6 +22,22 @@ const Event = () => {
       console.log(error);
     })
   })
+
+  const handleAddEvent = () => {
+    console.log(eventData)
+    const formData = new FormData();
+
+    for (let key in eventData) {
+      formData.append(key, eventData[key]);
+    }
+    axiosWithToken.post("https://a2svschola.onrender.com/events/", formData)
+    .then((response) => {
+        console.log(response.data);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+  }
   return (
     <main id="main" className="main">
       <div className="container">
@@ -71,6 +92,9 @@ const Event = () => {
                         Title
                       </span>
                       <input
+                        onChange={(event) => {
+                          setEventData({...eventData, title: event.target.value});
+                        }}
                         type="text"
                         className="form-control"
                         aria-label="Sizing example input"
@@ -86,6 +110,43 @@ const Event = () => {
                         Description
                       </span>
                       <input
+                        onChange={(event) => {
+                          setEventData({...eventData, description: event.target.value});
+                        }}
+                        type="text"
+                        className="form-control"
+                        aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default"
+                      />
+                    </div>
+                    <div className="input-group mb-3">
+                      <span
+                        className="input-group-text"
+                        id="inputGroup-sizing-default"
+                      >
+                        Event date
+                      </span>
+                      <input
+                        onChange={(event) => {
+                          setEventData({...eventData, event_date: event.target.value});
+                        }}
+                        type="date"
+                        className="form-control"
+                        aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default"
+                      />
+                    </div>
+                    <div className="input-group mb-3">
+                      <span
+                        className="input-group-text"
+                        id="inputGroup-sizing-default"
+                      >
+                        Event location
+                      </span>
+                      <input
+                        onChange={(event) => {
+                          setEventData({...eventData, location: event.target.value});
+                        }}
                         type="text"
                         className="form-control"
                         aria-label="Sizing example input"
@@ -95,6 +156,9 @@ const Event = () => {
                     {/* Event image upload */}
                     <div className="input-group mb-3">
                       <input
+                        onChange={(event) => {
+                          setEventData({...eventData, image: event.target.files[0]});
+                        }}
                         type="file"
                         className="form-control"
                         id="inputGroupFile02"
@@ -115,7 +179,9 @@ const Event = () => {
                     >
                       Cancel
                     </button>
-                    <button type="button" className="btn btn-primary">
+                    <button
+                    onClick={handleAddEvent}
+                    type="button" className="btn btn-primary">
                       Post
                     </button>
                   </div>

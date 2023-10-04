@@ -1,6 +1,6 @@
 import React ,{ useEffect, useState }from 'react';
 import axios from "axios";
-import mainImage from '../assets/img/smeagol.jpg';
+import mainImage from '../assets/img/news-4.jpg';
 import image1 from '../assets/img/news-1.jpg';
 import { Link } from 'react-router-dom';
 import axiosWithTokenHook from "../api/useAxios.js";
@@ -19,6 +19,7 @@ function Main() {
         axios.get("https://a2svschola.onrender.com/posts/")
         .then((response) => {
           setPosts(response.data);
+          console.log(response.data)
         })
         .catch((err) => {
           console.log(err)
@@ -26,7 +27,12 @@ function Main() {
       }, [])
 
     const handleAddPost = () => {
-        axiosWithToken.post("https://a2svschola.onrender.com/posts/", postData)
+        const formData = new FormData();
+
+        for (let key in postData) {
+        formData.append(key, postData[key]);
+        }
+        axiosWithToken.post("https://a2svschola.onrender.com/posts/", formData)
         .then((response) => {
             console.log(response.data);
         })
@@ -116,9 +122,9 @@ function Main() {
                                         <div className="card">
                                             <div className="card-title">
                                                 <div className="container">
-                                                    <div className="row pt-4">
-                                                        <div className="col fw-bolder mx-3"><h5>Voodoo <span>/Comm</span></h5></div>
-                                                        <div className="col text-end mx-3 fw-bolder"><h6>Joined</h6></div>
+                                                    <div className="row pt-0">
+                                                        <div className="col fw-bold mx-3 my-0"><h5>Voodoo </h5></div>
+                                                        {/* <div className="col text-end mx-3 fw-bolder"><h6>Joined</h6></div> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,8 +132,10 @@ function Main() {
                                                 posts.map((post) => {
                                                     return (
                                                         <div className="card-body">
-                                                            <img src={mainImage} alt="" className="w-100 pt-4" />
-                                                            <span>{post.content}</span>
+                                                            <img src={post.post_image} alt="Image not found" className="w-100 pt-0 pb-6" />
+                                                            <div className="col  mx-3 my-59">
+                                                                {post.content}
+                                                            </div>
                                                             <div className="mt-3">
                                                                 <a href="" className="mx-2 fw-bold"><i className="bi bi-hand-thumbs-up-fill"></i><span className="mx-2">Like</span></a>
                                                                 <Link to ='/comments' className="mx-2 fw-bold"><i className="bi bi-chat-left-dots-fill"></i><span className="mx-2">Comments</span></Link>

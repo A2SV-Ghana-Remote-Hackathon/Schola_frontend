@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import axiosWithTokenHook from "../api/useAxios.js";
+const axiosWithToken = axiosWithTokenHook();
 
 function getTimeAgo(announcementDate) {
   const currentDate = new Date();
@@ -24,6 +26,17 @@ function getTimeAgo(announcementDate) {
 
 const Announce = () => {
   const [announcements, setAnnouncements] = useState([]);
+  const [data, setData] = useState({});
+
+  const handleAddAnnouncement = () => {
+    axiosWithToken.post("https://a2svschola.onrender.com/announcements/", data)
+    .then((response) => {
+        console.log(response.data);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+  }
 
   useEffect(() => {
     axios.get("https://a2svschola.onrender.com/announcements/")
@@ -90,6 +103,9 @@ const Announce = () => {
                         Announcement
                       </span>
                       <input
+                        onChange={(event) => {
+                          setData({...data, content: event.target.value});
+                        }}
                         type="text"
                         className="form-control"
                         aria-label="Sizing example input"
@@ -105,7 +121,11 @@ const Announce = () => {
                     >
                       Cancel
                     </button>
-                    <button type="button" className="btn btn-primary">
+                    <button 
+                    onClick={() => {
+                      handleAddAnnouncement();
+                    }}
+                    type="button" className="btn btn-primary">
                       Post
                     </button>
                   </div>
